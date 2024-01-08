@@ -16,8 +16,8 @@ e4 e5 e6 e7
 (extra credit)
 Iterate through all pairs of solutions to the original problem, while
 trying all the options of +/- signals between these numbers.
-The numbers can be taken four by four, and next iterations are explored only when
-the previous partial results match.
+The numbers can be taken four by four, and next iterations are explored only
+when the previous partial results match.
 '''
 from itertools import permutations, combinations
 
