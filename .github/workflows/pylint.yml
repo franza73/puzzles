@@ -14,13 +14,20 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v41
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pylint
     - name: Analysing the code with pylint
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        pylint $(git ls-files '*.py')
+        pylint $ALL_CHANGED_FILES
     - name: Run it
+      env:
+        ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        python $(git ls-files '*.py')
+        python $ALL_CHANGED_FILES
