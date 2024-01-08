@@ -25,9 +25,15 @@ jobs:
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        pylint $ALL_CHANGED_FILES
+        for file in $(ls $ALL_CHANGED_FILES| grep '.py$')
+        do
+          pylint $file
+        done
     - name: Run it
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
       run: |
-        python $ALL_CHANGED_FILES
+        for file in $(ls $ALL_CHANGED_FILES| grep '.py$')
+        do
+          python $file
+        done
