@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-from math import gcd
+'''
+Finds Eisenstein Integers (see Wikipedia) with specified norm range.
+
+Result:
+4310930 1000000
+4311298 1000000
+4312919 1000000
+4313134 1000000
+4313718 1000000
+'''
 
 
 for N in range(4307000, 4317000):
@@ -17,11 +26,3 @@ for N in range(4307000, 4317000):
                 break
     if len(H) == 1000000:
         print(N, len(H))
-
-'''
-4310930 1000000
-4311298 1000000
-4312919 1000000
-4313134 1000000
-4313718 1000000
-'''
