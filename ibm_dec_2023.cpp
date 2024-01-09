@@ -6,7 +6,7 @@ using namespace	std;
 int 
 main()
 {
-	for (int N = 4310000; N <= 4314000; N++) {
+	for (int N = 4310500; N <= 4313800; N++) {
 		unordered_set < int >H;
 		int		y0 = N;
 		int		N2 = N * N;
