@@ -11,7 +11,7 @@ Result:
 '''
 
 
-for N in range(4310000, 4314000):
+for N in range(4310500, 4313800):
     H = set()
     y0 = N
     N2 = N**2
