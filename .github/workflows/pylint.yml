@@ -38,3 +38,11 @@ jobs:
           echo "Running $file"
           python $file
         done
+        for file in $(ls $ALL_CHANGED_FILES| grep '.cpp$')
+        do
+          OBJ=$(basename $file .cpp)
+          echo "Compiling $file"
+          g++ $file -o $OBJ
+          echo "Running $OBJ"
+          ./$OBJ
+        done
