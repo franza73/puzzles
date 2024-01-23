@@ -116,6 +116,7 @@ for a, b, c in permutations(A, 3):
                 continue
             sols.append([a, b, c, j, d, e, f, k, g, h, i, l, m, n, o, p])
 
+print('Solution')
 print(f'There are {len(sols)} solutions. One of them is {sols[0]}')
 
 # Extra credit
