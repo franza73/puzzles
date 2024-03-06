@@ -32,22 +32,22 @@ int main() {
     int i;
     long long a_i;
     long long a_0;
-    for (a_0 = 40000000000; a_0 < MAX; a_0++) {
-        if (isprime[a_0])
-            continue;
-        i = 1;
-        a_i = a_0;
-        while (a_i < MAX) {
-            a_i = a_i + i;
-            if (a_i < MAX && isprime[a_i])
-                break;
-            i += 1;
-        }
-        if (i >= N) {
-            cout << a_0 << " " << i << endl;
-            N = i;
-        }
-    }
+    // for (a_0 = 40000000000; a_0 < MAX; a_0++) {
+    //     if (isprime[a_0])
+    //         continue;
+    //     i = 1;
+    //     a_i = a_0;
+    //     while (a_i < MAX) {
+    //         a_i = a_i + i;
+    //         if (a_i < MAX && isprime[a_i])
+    //             break;
+    //         i += 1;
+    //     }
+    //     if (i >= N) {
+    //         cout << a_0 << " " << i << endl;
+    //         N = i;
+    //     }
+    // }
     cout << "final a_0 = " << a_0 << endl;
     return 0;
 }
