@@ -26,13 +26,13 @@ vector<bool> segmentedSieve(long long L, long long R) {
 }
 
 int main() {
-    long long MAX = 40000000000;
+    long long MAX = 50000000000;
     vector<bool> isprime = segmentedSieve(0, MAX);
     long long N = 1;
     int i;
     long long a_i;
     long long a_0;
-    for (a_0 = 3; a_0 < MAX; a_0++) {
+    for (a_0 = 40000000000; a_0 < MAX; a_0++) {
         if (isprime[a_0])
             continue;
         i = 1;
