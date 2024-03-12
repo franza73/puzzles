@@ -4,7 +4,7 @@
 using namespace std;
 
 int count_primes(long n) {
-    const int S = 100000;
+    const int S = 10000000;
     cout << S << endl;
     vector<long> primes;
     long nsqrt = sqrt(n);
