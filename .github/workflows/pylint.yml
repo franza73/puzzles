@@ -42,7 +42,7 @@ jobs:
         do
           OBJ=$(basename $file .cpp)
           echo "Compiling $file"
-          g++ -std=c++11 $file -o $OBJ
+          g++ -O3 -std=c++11 $file -o $OBJ
           echo "Running $OBJ"
           ./$OBJ
         done
