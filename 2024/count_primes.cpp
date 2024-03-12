@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 int count_primes(long n) {
