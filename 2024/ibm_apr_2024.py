@@ -1,5 +1,5 @@
 '''
-Solves the IBM Poder This Puzzle for April 2024
+Solves the IBM Ponder This Puzzle for April 2024
 '''
 from itertools import product
 from sympy.ntheory.modular import crt
