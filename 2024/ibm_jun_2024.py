@@ -18,16 +18,16 @@ def approx(val, delta):
     '''
     Use Stern-Brocott approximation to solve the equation.
     '''
-    _a, _b = mp.mpf('0'), mp.mpf('1')
-    _c, _d = mp.mpf('1'), mp.mpf('0')
+    a_n, a_d = mp.mpf('0'), mp.mpf('1')
+    b_n, b_d = mp.mpf('1'), mp.mpf('0')
     while True:
-        m, n = _a+_c, _b+_d
+        m, n = a_n+b_n, a_d+b_d
         x = m/n
-        fx = x/mp.mpf('2.0') - mp.mpf('0.5')/x
+        fx = x/2 - 1/(2*x)
         if fx < val:
-            _a, _b = m, n
+            a_n, a_d = m, n
         elif fx > val:
-            _c, _d = m, n
+            b_n, b_d = m, n
         eps = mp.fabs(fx - val)
         if eps < mp.mpf('10')**(-delta):
             m, n = int(m), int(n)
