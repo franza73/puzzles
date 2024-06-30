@@ -22,6 +22,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install sympy
+        pip install mpmath
     - name: Analysing the code with pylint
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
