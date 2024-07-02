@@ -7,7 +7,7 @@ triples:
   c = m**2 + n**2
 and the problem specifies a/b = pi.
   So our problem now is to find a fractional x (i.e. m/n) that solves the
-equation x/2 + 0.5/x = pi, with the correct precision. We solve the
+equation x/2 - 1/(2*x) = pi, with the correct precision. We solve the
 equation by applying the Stern-Brocott method.
 '''
 from math import gcd
