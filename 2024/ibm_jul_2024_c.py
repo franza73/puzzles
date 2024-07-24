@@ -1,13 +1,13 @@
 '''
 IBM Ponder This June 2024
 '''
+# from random import shuffle
 import numpy as np
-from random import shuffle
 
 
-def empty_board(n):
-    M = 4 * n
-    return np.matrix([[-1]*M]*M, dtype=int)
+def _empty_board(n):
+    m = 4 * n
+    return np.matrix([[-1]*m]*m, dtype=int)
 
 
 def equivalents(tile):
@@ -24,25 +24,32 @@ def equivalents(tile):
     return res
 
 
+BEST_SCORE = 185
+
+
 def backtrack(board, k, visited: set, score):
-    global best_score
+    '''
+    Fill the board by backtracking
+    '''
+    # pylint: disable=too-many-locals disable=too-many-branches
+    # pylint: disable=global-statement
+    global BEST_SCORE
+
     def pos(k):
-        return ((k//16)//N)*4 + (k%16)//4, ((k//16)%N)*4 + (k%16)%4
-    if score >= best_score:
+        return ((k//16)//N)*4 + (k % 16)//4, ((k//16) % N)*4 + (k % 16) % 4
+
+    def get_tile(k):
+        x_p, y_p = pos(k-1)
+        return board[(x_p-3):(x_p+1), (y_p-3):(y_p+1)]
+
+    if BEST_SCORE == 184:
         return
-    if best_score == 284:
+    if score >= BEST_SCORE:
         return
     if k > 0 and k % 16 == 0:
-        x_p, y_p = pos(k-1)
-        tile = board[(x_p-3):(x_p+1),(y_p-3):(y_p+1)]
-        if tile.sum() != 8:
+        tile = get_tile(k)
+        if tile.sum() != 8 or str(tile) in visited or score / k > 0.462:
             return
-        if str(tile) in visited:
-            return
-        # -- TODO 1 ---------
-        if score / k > 0.462:
-            return
-        # -------------------
         eqs = equivalents(tile)
         if len(eqs) != 4:
             return
@@ -50,11 +57,11 @@ def backtrack(board, k, visited: set, score):
             visited.add(str(ei))
         if k == (4*N)**2:
             print(board, score)
-            best_score = min(score, best_score)
+            BEST_SCORE = min(score, BEST_SCORE)
             return
     x, y = pos(k)
     vals = [0, 1]
-    shuffle(vals)
+    # shuffle(vals)
     flag_x = flag_y = False
     if x > 1 and board[x-1, y] == board[x-2, y]:
         flag_x = True
@@ -62,18 +69,18 @@ def backtrack(board, k, visited: set, score):
         flag_y = True
     if flag_x and flag_y and board[x-1, y] != board[x, y-1]:
         return
-    elif flag_x:
+    if flag_x:
         vals = [1 - board[x-1, y]]
-    elif flag_y:
+    if flag_y:
         vals = [1 - board[x, y-1]]
     for val in vals:
         score_n = score
         board_n = np.copy(board)
         board_n[x, y] = val
-        # -- TODO 2 -- zero-cost tile intersections --------------------------
+        # ------------ zero-cost tile intersections --------------------------
         if x in set([4, 8, 12, 16]) and board_n[x-1, y] == board_n[x, y]:
             continue
-        elif y in set([4, 8, 12, 16]) and board_n[x, y-1] == board_n[x, y]:
+        if y in set([4, 8, 12, 16]) and board_n[x, y-1] == board_n[x, y]:
             continue
         # --------------------------------------------------------------------
         if x > 0 and board_n[x, y] == board_n[x-1, y]:
@@ -85,5 +92,4 @@ def backtrack(board, k, visited: set, score):
 
 
 N = 5
-best_score = 185
-backtrack(empty_board(N), 0, set(), 0)
+backtrack(_empty_board(N), 0, set(), 0)
