@@ -31,7 +31,8 @@ def backtrack(board, k, visited: set, score):
     '''
     Fill the board by backtracking
     '''
-    # pylint: disable=too-many-locals disable=too-many-branches
+    # pylint: disable=too-many-locals 
+    # pylint: disable=too-many-branches
     # pylint: disable=global-statement
     global BEST_SCORE
 
