@@ -26,9 +26,10 @@ def equivalents(tile):
 
 class TileBoardPuzzle:
     ''' TileBoardPuzzle '''
-    def __init__(self, n, best_score, rate):
+    def __init__(self, n, goal_score, rate):
         self.n = n
-        self.best_score = best_score
+        self.best_score = goal_score + 1
+        self.goal_score = goal_score
         self.rate = rate
 
     def backtrack(self, board, k, visited: set, score):
@@ -46,7 +47,7 @@ class TileBoardPuzzle:
             x_p, y_p = pos(k-1)
             return board[(x_p-3):(x_p+1), (y_p-3):(y_p+1)]
 
-        if self.best_score == 184 or score >= self.best_score:
+        if self.best_score == self.goal_score or score >= self.best_score:
             return
         if k > 0 and k % 16 == 0:
             tile = get_tile(k)
@@ -91,9 +92,12 @@ class TileBoardPuzzle:
             if y > 0 and board_n[x, y] == board_n[x, y-1]:
                 score_n += 1
             visited_n = visited.copy()
-            self.backtrack(self, board_n, k+1, visited_n, score_n)
+            self.backtrack(board_n, k+1, visited_n, score_n)
 
     def solve(self):
         ''' solve the puzzle '''
         # pylint: disable=too-many-function-args
-        self.backtrack(self, _empty_board(5), 0, set(), 0)
+        self.backtrack(_empty_board(5), 0, set(), 0)
+
+
+TileBoardPuzzle(5, 184, 0.462).solve()
