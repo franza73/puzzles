@@ -78,12 +78,12 @@ def backtrack(board, k, visited: set, score):
         score_n = score
         board_n = np.copy(board)
         board_n[x, y] = val
-        # ------------ zero-cost tile intersections --------------------------
+        # ------------ zero-cost tile intersections -------------------------
         if x in set([4, 8, 12, 16]) and board_n[x-1, y] == board_n[x, y]:
             continue
         if y in set([4, 8, 12, 16]) and board_n[x, y-1] == board_n[x, y]:
             continue
-        # --------------------------------------------------------------------
+        # -------------------------------------------------------------------
         if x > 0 and board_n[x, y] == board_n[x-1, y]:
             score_n += 1
         if y > 0 and board_n[x, y] == board_n[x, y-1]:
