@@ -24,6 +24,7 @@ class Board:
         self.score = 0
 
     def _pos(self, k):
+        ''' Fills a complete tile at a time '''
         return ((k//16)//self.n)*4 + (k % 16)//4, \
                ((k//16) % self.n)*4 + (k % 16) % 4
 
@@ -145,4 +146,4 @@ TileBoardPuzzle(4, 66, 0.259).solve()
 # With no cost tiling, the total score of the board is:
 # 3*4 + 8*6 + 8*8 + 6*10 = 184
 
-TileBoardPuzzle(5, 184, 0.462, True).solve()
+# TileBoardPuzzle(5, 184, 0.462, True).solve()
