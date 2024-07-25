@@ -1,5 +1,4 @@
 ''' IBM Ponder This July 2024 '''
-import copy
 import numpy as np
 
 
@@ -17,11 +16,16 @@ def equivalents(tile):
 
 class Board:
     ''' Board of tiles '''
-    def __init__(self, n):
+    def __init__(self, n, board=None):
         self.n = n
-        self.m = np.matrix([[-1]*4*n]*4*n, dtype=int)
-        self.k = 0
-        self.score = 0
+        if not board:
+            self.m = np.matrix([[-1]*4*n]*4*n, dtype=int)
+            self.k = 0
+            self.score = 0
+        else:
+            self.m = np.copy(board.m)
+            self.k = board.k
+            self.score = board.score
 
     def _pos(self, k):
         ''' Fills a complete tile at a time '''
@@ -89,8 +93,8 @@ class TileBoardPuzzle:
         x, y = board.pos()
 
         for val in _vals():
-            board_n = copy.copy(board)
-            board_n.k = board.k + 1
+            board_n = Board(board.n, board)
+            board_n.k += 1
             board_n.m[x, y] = val
             # -------------- no-cost tile intersections --------------------
             if x > 0 and x % 4 == 0 and board_n.m[x-1, y] == board_n.m[x, y]:
@@ -146,4 +150,4 @@ TileBoardPuzzle(4, 66, 0.259).solve()
 # With no cost tiling, the total score of the board is:
 # 3*4 + 8*6 + 8*8 + 6*10 = 184
 
-# TileBoardPuzzle(5, 184, 0.462, True).solve()
+TileBoardPuzzle(5, 184, 0.462, True).solve()
