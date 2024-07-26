@@ -61,7 +61,7 @@ class TileBoardPuzzle:
 
     We used this method to find the optimal values for the small and
     large problems. We start with a best_score of goal_score + 1 as we
-    already know we can reach the optimal values.
+    already knew from previous runs that we can reach the optimal values.
 
     The no-cost tile intersections section makes sure we are looking
     for the smaller subset of tiling options that imply in no tile-tile
