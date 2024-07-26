@@ -28,7 +28,16 @@ class Board:
             self.score = board.score
 
     def _pos(self, k):
-        ''' Fills a complete tile at a time '''
+        '''
+        Fills a complete tile at a time, each time from left to right
+        and top to bottom. And the complete tiles from left to right
+        and top to bottom.
+        Like this:
+         0  1  2  3 16 17 18 19
+         4  5  6  7 20 ....
+         8  9 10 11
+        12 13 14 15
+        '''
         return ((k//16)//self.n)*4 + (k % 16)//4, \
                ((k//16) % self.n)*4 + (k % 16) % 4
 
@@ -47,7 +56,34 @@ class Board:
 
 
 class TileBoardPuzzle:
-    ''' Solves the board tiling problem using backtracking '''
+    '''
+    Solves the board tiling problem using backtracking
+
+    We used this method to find the optimal values for the small and
+    large problems. We start with a best_score of goal_score + 1 as we
+    already know we can reach the optimal values.
+
+    The no-cost tile intersections section makes sure we are looking
+    for the smaller subset of tiling options that imply in no tile-tile
+    cost.
+
+    An heuristic applied was to discard branches with score/k higher
+    than a specified threshold. The value, rate parameter to TileBoardPuzzle
+    class, is ideally equal to best_cost/total_number_of_tiles. Partial
+    evaluations above this limit are discarded, as they are not expected
+    to lead to the goal score.
+
+    Any partial estimation that costs above the best_score is discarded.
+
+    _vals function: the value for the tile at (x, y) can be found based
+    on the two tiles above it or the two tiles to its left. There is
+    also a condition where it's impossible and we return an empty list
+    of options in this case. If the values above and at left don't help
+    finding the current position, we return the list with two options.
+
+    If we reach the last position of the board, we update the best score
+    and print the board.
+    '''
     def __init__(self, n, goal_score, rate, star=False) -> None:
         self.n = n
         self.best_score = goal_score + 1
@@ -118,7 +154,7 @@ class TileBoardPuzzle:
 #
 # Best choice of tiles to fill a 4x4 board.
 #
-# score   # of tiles
+# score   # of distinct tiles
 # -----   --------------------------------------------------------------------
 # 0       1        There is 1 tile of score 0
 # 3       2        There are 2 tiles of score 3
@@ -138,7 +174,7 @@ TileBoardPuzzle(4, 66, 0.259).solve()
 #
 # Best choice for tiles to fill a 5x5 board with tiles that are 4-equivalent.
 #
-# score   # of tiles
+# score   # of distinct tiles
 # -----   --------------------------------------------------------------------
 #  4      3        There are 3 tiles of score 4
 #  6      8        There are 8 tiles of score 6
