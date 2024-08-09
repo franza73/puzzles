@@ -8,7 +8,7 @@ from collections import Counter
 import numpy as np
 
 
-def calculate_p(total, sz, den=10**7):
+def calculate_p(total, sz, den=10**8):
     '''
     Estimates the Markov transition matrix
     '''
@@ -40,7 +40,7 @@ def avtime(q):
     Calculates the average time for the Markov Process
     '''
     x, y = q.shape
-    print('DEBUG:', x, y, q)
+    # print('DEBUG:', x, y, q)
     v = np.linalg.inv(np.eye(x) - q) @ np.ones([x, 1])
     return v[0, 0]
 
