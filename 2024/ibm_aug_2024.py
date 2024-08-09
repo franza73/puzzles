@@ -39,7 +39,7 @@ def avtime(q):
     '''
     Calculates the average time for the Markov Process
     '''
-    x, y = q.shape
+    x, _ = q.shape
     # print('DEBUG:', x, y, q)
     v = np.linalg.inv(np.eye(x) - q) @ np.ones([x, 1])
     return v[0, 0]
