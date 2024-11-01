@@ -1,9 +1,11 @@
+''' IBM Ponder This October 2024 '''
 from collections import Counter
 from heapq import heappop, heappush
 from multiprocessing import Pool
 import os
 
 
+''' takes a number and return the count of factors '''
 def decimal_to_factors(d):
     h = Counter({2: 0, 3: 0, 7: 0})
     for di in str(d):
