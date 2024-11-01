@@ -5,7 +5,6 @@ from multiprocessing import Pool
 import os
 
 
-''' takes a number and return the count of factors '''
 def decimal_to_factors(d):
     h = Counter({2: 0, 3: 0, 7: 0})
     for di in str(d):
@@ -49,7 +48,7 @@ class Problem():
                 sz = len(str(a))+k
                 if sz > self.max_exp:
                     break
-                v_ = decimal_to_factors(a)
+                v = decimal_to_factors(a)
                 _a_factors[1] = v[1]
                 if v == _a_factors:
                     x = a * 10**k + _b
