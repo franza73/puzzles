@@ -23,10 +23,6 @@ def decimal_to_factors(d):
     return h
 
 
-def key(d):
-    return ','.join([f'{k}:{d[k]}' for k in sorted(d.keys())])
-
-
 def is_free_of_0_5(_n):
     s = str(_n)
     return '0' not in s and '5' not in s
@@ -37,7 +33,7 @@ class Problem():
         self.problem = problem
         self.max_exp = max_exp
 
-    def dig(self, args):
+    def _dig(self, args):
         _b, _x_factors, _a_factors = args
         k = len(str(_b))
         a0 = _b // 2**min(_x_factors[2], k)
@@ -70,6 +66,9 @@ class Problem():
                     return False
             return True
 
+        def _key(d):
+            return ','.join([f'{k}:{d[k]}' for k in sorted(d.keys())])
+
         if self.problem == 'b_is_square':
             cond_2_3 = _b_is_square
         elif self.problem == 'a_is_cube':
@@ -85,7 +84,7 @@ class Problem():
         heappush(heap, (b0, x0_factors))
         while heap:
             b, x_factors = heappop(heap)
-            visited_key = key(x_factors)
+            visited_key = _key(x_factors)
             if visited_key in visited:
                 continue
             visited.add(visited_key)
@@ -103,7 +102,7 @@ class Problem():
                     continue
                 heappush(heap, (b_n, x_factors_n))
         with Pool(os.cpu_count()) as pool:
-            pool.map(self.dig, tasks)
+            pool.map(self._dig, tasks)
 
 
 if __name__ == '__main__':
