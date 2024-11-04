@@ -1,4 +1,51 @@
-''' IBM Ponder This October 2024 '''
+''' IBM Ponder This October 2024
+
+We start with the smaller option for B (1*2*3*4*6*7*8*9), then multiply
+it by the valid digits, that implies in composed increments by {2, 3, 7}
+that can generate all larger values of B.
+
+We use a min heap for this process of growing B, creating the B values in
+increasing order.
+
+The process generates pairs (B, X_factors). From these we can calculate
+A_factors as the terms of the digit product on X that are not in the digit
+product of B.
+
+And A can be obtained from a_factors by recursion. Here is the rationale:
+
+    A * 10**k + B = M * B
+    A * 10**k = (M-1) * B = N * B
+
+but 5 cannot divide B (would be a contradiction with the problem's
+assumptions), so,
+
+   A * 2**k   = Q * B, with Q = N // 5**k
+   A = R * (B // 2**min(k, k2))
+
+   where k2 is the exponent of 2 on B (B = 2**k2 * 3**k3 * 7**k7).
+
+   And R = Q // max(0, k - k2).
+
+   The equation for A can be used as a recursion:
+
+   A[0] = 0
+   A[n] = A[n-1] + (B // 2**min(k, k2))
+
+   and when A[n] doesn't contain {0, 5}, and all the eight digits are
+used, and all it's terms are the expected values (A_factors), we have
+reached a solution.
+
+   As each different value of B defines a different recursion, then the
+whole candidate is a good case for parallel calculation.
+
+   After adjusting the value of the exponents to cut short large estimations,
+we could solve the two problem in effective time.
+
+   In summary:
+
+   X_factors => B => B_factors => A_factors => A => X
+
+'''
 from collections import Counter
 from heapq import heappop, heappush
 from multiprocessing import Pool
