@@ -61,9 +61,9 @@ def calc_f(a,b,c,d,e, goal):
 # -- main --
 #goal = 144 * 3**2
 goal = 128
-N = 400 + 1
+N = 1000 + 1
 for a in range(2, N):
-    print(a)
+    print(a, flush=True)
     for b in range(a, N):
         for c in range(max(b - a, b), min(N - a - b, b + a)):
             # -- parallel -- 
