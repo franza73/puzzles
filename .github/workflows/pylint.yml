@@ -36,7 +36,7 @@ jobs:
         for file in $(ls $ALL_CHANGED_FILES| grep '.py$')
         do
           echo "Running $file"
-          python $file
+          python -u $file
         done
         for file in $(ls $ALL_CHANGED_FILES| grep '.cpp$')
         do
