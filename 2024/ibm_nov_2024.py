@@ -22,7 +22,7 @@ and Integer Volume", I come out with a plan for solving the problem:
                + 2*c**2*i*j**2)
               (- a**4*j**2 - a**2*b**2*c**2 + a**2*b**2*j**2 + a**2*c**2*i**2
                + a**2*c**2*j**2 + a**2*i**2*j**2 - a**2*j**4 + b**2*c**2*i**2
-               - b**2*i**2*j**2 - c**4*i**2 - c**2*i**4 + c**2*i**2*j**2)
+              - b**2*i**2*j**2 - c**4*i**2 - c**2*i**4 + c**2*i**2*j**2
 '''
 import math
 from multiprocessing import Pool
@@ -63,14 +63,18 @@ def calculate_f_(args):
 
 
 if __name__ == '__main__':
-    M = 200
+    N = 1000
     # goal = 144*3**2
     goal = 128
     # goal = 655
     with Pool(os.cpu_count()) as pool:
-        for a in range(1, M+1):
-            for b in range(1, a+1):
-                for c in range(max(1, a-b), b+1):
+        #for a in range(1, M+1):
+        #    for b in range(1, a+1):
+        #        for c in range(max(1, a-b), b+1):
+        for a in range(2, N):
+            print(a, flush=True)
+            for b in range(a, N):
+                for c in range(max(b - a, b), min(N - a - b, b + a)):
                     tasks = []
                     for i in range(-a, a+1):
                         for j in range(-c, c+1):
