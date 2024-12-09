@@ -71,7 +71,7 @@ if __name__ == '__main__':
         #for a in range(1, M+1):
         #    for b in range(1, a+1):
         #        for c in range(max(1, a-b), b+1):
-        for a in range(2, N):
+        for a in range(50, N):
             print(a, flush=True)
             for b in range(a, N):
                 for c in range(max(b - a, b), min(N - a - b, b + a)):
