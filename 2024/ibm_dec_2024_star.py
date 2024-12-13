@@ -2,7 +2,7 @@ from collections import Counter
 
 
 cnt = Counter()
-MAX = 999999999
+MAX = 9999999999
 best = {}
 d = '1'
 for i in range(1, MAX+1):
