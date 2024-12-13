@@ -2,7 +2,7 @@ from collections import Counter
 
 
 cnt = Counter()
-MAX = 9999999999
+MAX = 99999999999
 best = {}
 d = '1'
 for i in range(1, MAX+1):
@@ -28,4 +28,6 @@ for 1/2:
 
 for 3/4
 1 (129140160, 172186880)
+1 (2154188436, 2872251248)
+
 '''
