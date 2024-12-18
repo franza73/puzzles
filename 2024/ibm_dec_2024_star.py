@@ -5,8 +5,7 @@ cnt = Counter()
 MAX = 99999999999
 best = {}
 d = '1'
-cnt[d] = 10460353200 - 1
-for i in range(13947137600, MAX+1):
+for i in range(1, MAX+1):
     if d in str(i):
         cnt[d] += 1
         if cnt[d]*4 == i*3:
