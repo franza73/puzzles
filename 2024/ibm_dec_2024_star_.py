@@ -16,10 +16,11 @@ def function(n):
 n = 1456
 assert function(1456) == 728
 
-# Find the range where the solution should be found
+# Find the range where the solution should be found:
+# [min, max] = [10**13-1, 10**14-1]
 for k in range(2, 15):
     n = 10**k - 1
-    print(k, n, function(n)/ n)
+    print(k, n, function(n) / n)
 
 # Apply binary search to find the larger solution
 a, b = 10**13-1, 10**14-1
