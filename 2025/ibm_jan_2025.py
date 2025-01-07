@@ -25,34 +25,16 @@ def solve(va, vb, vc, eps):
             res += [('TC', (a, b, vc))]
         if a != 0:
             res += [('AS', (0, b, c))]
-            if a + b <= vb:
-                res += [('AB', (0, a + b, c))]
-            else:
-                res += [('AB', (a + b - vb, vb, c))]
-            if a + c <= vc:
-                res += [('AC', (0, b, a + c))]
-            else:
-                res += [('AC', (a + c - vc, b, vc))]
+            res += [('AB', (max(0, a + b - vb), min(a + b, vb), c))]
+            res += [('AC', (max(0, a + c - vc), b, min(a + c, vc)))]
         if b != 0:
             res += [('BS', (a, 0, c))]
-            if a + b <= va:
-                res += [('BA', (a + b, 0, c))]
-            else:
-                res += [('BA', (va, a + b - va, c))]
-            if b + c <= vc:
-                res += [('BC', (a, 0, b + c))]
-            else:
-                res += [('BC', (a, b + c - vc, vc))]
+            res += [('BA', (min(a + b, va), max(0, a + b - va), c))]
+            res += [('BC', (a, max(0, b + c - vc), min(b + c, vc)))]
         if c != 0:
             res += [('CS', (a, b, 0))]
-            if a + c <= va:
-                res += [('CA', (a + c, b, 0))]
-            else:
-                res += [('CA', (va, b, a + c - va))]
-            if b + c <= vb:
-                res += [('CB', (a, b + c, 0))]
-            else:
-                res += [('CB', (a, vb, b + c - vb))]
+            res += [('CA', (min(a + c, va), b, max(0, a + c - va)))]
+            res += [('CB', (a, min(b + c, vb), max(0, b + c - vb)))]
         return res
 
     todo = deque([(0, (0, 0, 0))])
@@ -104,10 +86,13 @@ def approx(i, j, k, val, delta):
         
 if __name__ == "__main__":
     va, vb, vc = sqrt(5), sqrt(3), sqrt(2)
+
     print('Reproduce the example:')
     print(solve(va, vb, vc, 0.01))
+    
     print('Solution:')
     print(solve(va, vb, vc, 0.0003))
+    
     print('Bonus question:')
     for i in range(-10, 11):
         for j in range(-10, 11):
