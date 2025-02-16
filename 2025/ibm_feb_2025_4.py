@@ -130,7 +130,7 @@ def solve(n):
             for p1 in primes:
                 for p2 in primes:
                     todo += [(n, a, trie, p1, p2)]
-        #shuffle(todo)
+        shuffle(todo)
         for res in executor.map(solve_parallel, todo):
             pass
 
