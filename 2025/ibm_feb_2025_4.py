@@ -14,6 +14,7 @@ from collections import defaultdict
 from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
+from random import shuffle
 
 
 class PrimesTrie:
@@ -33,6 +34,17 @@ class PrimesTrie:
             curr = curr[d]
         return set(curr.keys())
 
+
+def first_square(prime1, prime2):
+    n = len(str(prime1))
+    m = [[-1] * n for _ in range(n)]
+    for i in range(n-1, -1, -1):
+        m[i][i] = prime1 % 10
+        prime1 //= 10
+    for i in range(n-1, -1, -1):
+        m[i][n-i-1] = prime2 % 10
+        prime2 //= 10
+    return m
 
 def cost(m):
     n = len(m)
@@ -61,15 +73,21 @@ def cost(m):
 
 
 def solve_parallel(args):
-    n, a, primes = args
-    res = []
+    n, a, trie, p1, p2 = args
 
     def fill(square, pos):
         x, y = pos
         if y == n:
             # full square
             full_cost = cost(square)
-            res.append((full_cost, a, square))
+            print(full_cost, square)
+            return
+        if square[x][y] != -1:
+            n_x, n_y = x + 1, y
+            if n_x == n:
+                n_x = 0
+                n_y += 1
+            fill(square, (n_x, n_y))
             return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
@@ -79,16 +97,6 @@ def solve_parallel(args):
         if not opts_y:
             return
         opts = opts_x.intersection(opts_y)
-        if x == y:
-            opts_d1 = trie.search([square[i][i] for i in range(x)])
-            opts = opts.intersection(opts_d1)
-            if not opts:
-                return
-        if x == 1 and y == n-1 and square[0][n-1] > 0:
-            # Cut short if secondary diagonal was filled with non prime
-            opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
-            if not opts_d2:
-                return
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
@@ -98,12 +106,9 @@ def solve_parallel(args):
                 n_y += 1
             fill(n_square, (n_x, n_y))
 
-    trie = PrimesTrie(primes)
-    fill([[0 for i in range(n)] for j in range(n)], (0, 0))
-    if res:
-        res.sort()
-        print(res[0])
-        print(res[-1])
+    #print(first_square(p1, p2))
+    print('DEBUG:', p1, p2)
+    fill(first_square(p1, p2), (0, 0))
 
 
 def solve(n):
@@ -114,12 +119,22 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()))
+        # todo = ((n, a, len(H[a])) for a in sorted(H.keys()))
+        # print(list(todo))
+        # exit(1)
+        todo = []
+        for a in sorted(H.keys()):
+            primes = H[a]
+            trie = PrimesTrie(primes)
+            for p1 in primes:
+                for p2 in primes:
+                    todo += [(n, a, trie, p1, p2)]
+        shuffle(todo)
         for res in executor.map(solve_parallel, todo):
             pass
 
 
 if __name__ == "__main__":
     # solve(4)
-    solve(5)
-    # solve(6)
+    # solve(5)
+    solve(6)
