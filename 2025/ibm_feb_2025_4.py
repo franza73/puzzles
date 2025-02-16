@@ -106,7 +106,6 @@ def solve_parallel(args):
                 n_y += 1
             fill(n_square, (n_x, n_y))
 
-    #print(first_square(p1, p2))
     print('DEBUG:', p1, p2)
     fill(first_square(p1, p2), (0, 0))
 
@@ -129,7 +128,7 @@ def solve(n):
             for p1 in primes:
                 for p2 in primes:
                     todo += [(n, a, trie, p1, p2)]
-        shuffle(todo)
+        #shuffle(todo)
         for res in executor.map(solve_parallel, todo):
             pass
 
