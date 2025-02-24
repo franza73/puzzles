@@ -109,7 +109,7 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 1)
+    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
 
 
 def solve(n):
