@@ -14,6 +14,7 @@ from collections import defaultdict
 from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
+from collections import Counter
 
 
 class PrimesTrie:
@@ -63,13 +64,20 @@ def cost(m):
 def solve_parallel(args):
     n, a, primes = args
 
-    def fill(square, pos):
+    def fill(square, pos, hist, index):
         x, y = pos
         if y == n:
             # full square
             full_cost = cost(square)
             print(full_cost, a, square)
             return
+        # TEMP: exclude dense squares
+        if index > 6:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            if d_cost / index**2 < 0.84:
+                return
+            # if index <= 30 and d_cost > 350:
+            #     return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
         if not opts_x:
@@ -88,17 +96,20 @@ def solve_parallel(args):
             opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
             if not opts_d2:
                 return
+        #for _, opt in sorted((hist[opt], opt) for opt in opts):
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
+            n_hist = Counter(hist)
+            n_hist[opt] += 3 if (x == y or x+y == n-1) else 2
             n_x, n_y = x + 1, y
             if n_x == n:
                 n_x = 0
                 n_y += 1
-            fill(n_square, (n_x, n_y))
+            fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    fill([[0 for i in range(n)] for j in range(n)], (0, 0))
+    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 1)
 
 
 def solve(n):
@@ -115,6 +126,6 @@ def solve(n):
 
 
 if __name__ == "__main__":
-    # solve(4)
+    #solve(4)
     # solve(5)
     solve(6)
