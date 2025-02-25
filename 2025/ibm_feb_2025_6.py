@@ -74,7 +74,7 @@ def solve_parallel(args):
         # Explore dense squares
         if index > 6:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 < 0.8:
+            if d_cost / index**2 < 0.81:
                 return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
