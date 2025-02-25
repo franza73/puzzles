@@ -85,7 +85,7 @@ def solve_parallel(args):
                 return
         elif index >= 16:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 > 0.43:
+            if d_cost / index**2 > 0.35: # try 0.35
                 return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
