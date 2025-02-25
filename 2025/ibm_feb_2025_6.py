@@ -71,10 +71,25 @@ def solve_parallel(args):
             full_cost = cost(square)
             print(full_cost, a, square)
             return
-        # Explore dense squares
-        if index > 6:
+        # # __MAX__ Explore dense squares
+        # if index > 6:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if d_cost / index**2 < 0.83:
+        #         return
+
+        # __MIN__ Trying to repeat 248
+        # FIXME: TODO: if more than 248, then cut short
+        if 4 < index < 16:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 < 0.83:
+            #if d_cost >= 248:
+            #    return
+            if d_cost / index**2 > 0.56:
+                return
+        elif index >= 16:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            #if d_cost >= 248:
+            #    return
+            if d_cost / index**2 > 0.43:
                 return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
