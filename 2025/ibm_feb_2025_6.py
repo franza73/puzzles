@@ -71,13 +71,11 @@ def solve_parallel(args):
             full_cost = cost(square)
             print(full_cost, a, square)
             return
-        # TEMP: exclude dense squares
+        # Explore dense squares
         if index > 6:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 < 0.84:
+            if d_cost / index**2 < 0.8:
                 return
-            # if index <= 30 and d_cost > 350:
-            #     return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
         if not opts_x:
