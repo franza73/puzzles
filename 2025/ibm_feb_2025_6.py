@@ -74,7 +74,7 @@ def solve_parallel(args):
         # Explore dense squares
         if index > 6:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 < 0.82:
+            if d_cost / index**2 < 0.83:
                 return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
@@ -118,7 +118,7 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()))
+        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 44)
         for res in executor.map(solve_parallel, todo):
             pass
 
