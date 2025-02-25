@@ -118,7 +118,7 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 44)
+        todo = ((n, a, H[a]) for a in sorted(H.keys()))
         for res in executor.map(solve_parallel, todo):
             pass
 
