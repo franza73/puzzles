@@ -77,15 +77,15 @@ def solve_parallel(args):
         #     if d_cost / index**2 < 0.83:
         #         return
 
-        # __MIN__ Trying to repeat 248
-        # FIXME: TODO: if more than 248, then cut short
-        if 4 < index < 16:
+        # __MIN__ Trying to repeat 235
+        # if 4 < index < 16:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if d_cost / index**2 > 0.61:
+        #         return
+        # el
+        if index >= 16:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 > 0.56:
-                return
-        elif index >= 16:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 > 0.35:
+            if d_cost / index**2 > 0.36 or d_cost > 390:
                 return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
@@ -129,7 +129,7 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()))
+        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 32)
         for res in executor.map(solve_parallel, todo):
             pass
 
