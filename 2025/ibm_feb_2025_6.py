@@ -71,6 +71,14 @@ def solve_parallel(args):
             full_cost = cost(square)
             print(full_cost, a, square)
             return
+        # trim some large costs
+        if index >= 16:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            if d_cost > 374:
+                return
+        opts = set()
+        if square[x][y] != -1:
+            opts.add(square[x][y])
         # # __MAX__ Explore dense squares
         # if index > 6:
         #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
@@ -83,32 +91,35 @@ def solve_parallel(args):
         #     if d_cost / index**2 > 0.61:
         #         return
         # el
-        if index >= 16:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 > 0.36 or d_cost > 390:
+        # if index >= 16:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if d_cost / index**2 > 0.36 or d_cost > 390:
+        #         return
+        else:
+            opts_x = trie.search([square[x][j] for j in range(y)])
+            if not opts_x:
                 return
-        opts = set()
-        opts_x = trie.search([square[x][j] for j in range(y)])
-        if not opts_x:
-            return
-        opts_y = trie.search([square[i][y] for i in range(x)])
-        if not opts_y:
-            return
-        opts = opts_x.intersection(opts_y)
-        if x == y:
-            opts_d1 = trie.search([square[i][i] for i in range(x)])
-            opts = opts.intersection(opts_d1)
-            if not opts:
+            opts_y = trie.search([square[i][y] for i in range(x)])
+            if not opts_y:
                 return
-        if x == 1 and y == n-1 and square[0][n-1] > 0:
-            # Cut short if secondary diagonal was filled with non prime
-            opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
-            if not opts_d2:
-                return
+            opts = opts_x.intersection(opts_y)
+            if x == y:
+                opts_d1 = trie.search([square[i][i] for i in range(x)])
+                opts = opts.intersection(opts_d1)
+                if not opts:
+                    return
+            if x == 1 and y == n-1 and square[0][n-1] > 0:
+                # Cut short if secondary diagonal was filled with non prime
+                opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
+                if not opts_d2:
+                    return
         #for _, opt in sorted((hist[opt], opt) for opt in opts):
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
+            # symmetrical
+            if x != y:
+                n_square[y][x] = opt 
             n_hist = Counter(hist)
             n_hist[opt] += 3 if (x == y or x+y == n-1) else 2
             n_x, n_y = x + 1, y
@@ -118,7 +129,14 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
+    # m = [[5,  8,  4,  3,  9,  3], 
+    #      [8, -1, -1, -1, -1, -1], 
+    #      [4, -1, -1, -1, -1, -1], 
+    #      [3, -1, -1, -1, -1, -1], 
+    #      [9, -1, -1, -1, -1, -1], 
+    #      [3, -1, -1, -1, -1, -1]]
+    # fill(m, (0, 0), Counter(), 0)
+    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
 
 
 def solve(n):
@@ -129,7 +147,7 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 32)
+        todo = ((n, a, H[a]) for a in sorted(H.keys()))
         for res in executor.map(solve_parallel, todo):
             pass
 
