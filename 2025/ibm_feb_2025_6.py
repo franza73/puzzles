@@ -70,7 +70,8 @@ def solve_parallel(args):
         if y == n:
             # full square
             full_cost = cost(square)
-            print(full_cost, a, square)
+            if full_cost < 100:
+                print(full_cost, a, square)
             return
         # trim some large costs
         if index >= 24:
@@ -152,7 +153,7 @@ def solve(n):
 20
 22
 23 *
-25
+25 *
 26
 28
 29
