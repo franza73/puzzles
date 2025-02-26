@@ -15,6 +15,7 @@ from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
 from collections import Counter
+from random import shuffle
 
 
 class PrimesTrie:
@@ -72,7 +73,7 @@ def solve_parallel(args):
             print(full_cost, a, square)
             return
         # trim some large costs
-        if index >= 16:
+        if index >= 24:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
             if d_cost > 354:
                 return
@@ -129,13 +130,6 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    # m = [[5,  8,  4,  3,  9,  3], 
-    #      [8, -1, -1, -1, -1, -1], 
-    #      [4, -1, -1, -1, -1, -1], 
-    #      [3, -1, -1, -1, -1, -1], 
-    #      [9, -1, -1, -1, -1, -1], 
-    #      [3, -1, -1, -1, -1, -1]]
-    # fill(m, (0, 0), Counter(), 0)
     fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
 
 
@@ -148,10 +142,29 @@ def solve(n):
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
         todo = ((n, a, H[a]) for a in sorted(H.keys()))
+        shuffle(todo)
         for res in executor.map(solve_parallel, todo):
             pass
 
-
+'''
+17 *
+19 *
+20
+22
+23 *
+25
+26
+28
+29
+31
+32
+34
+35
+37
+38
+40
+41 *
+'''
 if __name__ == "__main__":
     #solve(4)
     # solve(5)
