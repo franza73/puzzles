@@ -147,25 +147,6 @@ def solve(n):
         for res in executor.map(solve_parallel, todo):
             pass
 
-'''
-17 *
-19 *
-20
-22
-23 *
-25 *
-26
-28
-29
-31
-32
-34
-35
-37
-38
-40
-41 *
-'''
 if __name__ == "__main__":
     #solve(4)
     # solve(5)
