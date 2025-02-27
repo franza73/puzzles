@@ -76,7 +76,7 @@ def solve_parallel(args):
         # trim some large costs
         if index >= 24:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost > 354:
+            if d_cost > 390:
                 return
         opts = set()
         if square[x][y] != -1:
