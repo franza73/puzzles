@@ -130,8 +130,7 @@ def solve_parallel(args):
 41
 43
 44 done
-
-set([46, 47, 49, 50, 52, 53])
+set([23, 25, 29,31, 35, 37, 41, 43])
 '''
 def solve(n):
     # For each value of a in increasing order, find the squares with primes
@@ -146,7 +145,8 @@ def solve(n):
         # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a not in set([46, 47, 49, 50, 52, 53]): 
+            if a not in set([23, 25, 29,31, 35, 37, 41, 43]):
+            # set([46, 47, 49, 50, 52, 53]): 
             #set([4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19]):
                continue            
             primes = H[a]
