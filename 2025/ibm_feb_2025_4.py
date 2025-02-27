@@ -59,7 +59,7 @@ def cost(m):
     # Peace of mind... recheck the primes.
     for si in s:
        if not isprime(si):
-           return -1, -1
+           return -1, _len_s
     hist = defaultdict(int)
     for si in s:
         for sii in map(int, list(str(si))):
@@ -80,7 +80,6 @@ def solve_parallel(args):
             full_cost, len_s = cost(square)
             if full_cost != -1 and full_cost < 180:
                 print(full_cost, len_s, a, square)
-            #print(full_cost, square)
             return
         if square[x][y] != -1:
             n_x, n_y = x + 1, y
@@ -97,6 +96,11 @@ def solve_parallel(args):
         if not opts_y:
             return
         opts = opts_x.intersection(opts_y)
+        # if x == y:
+        #     opts_d1 = trie.search([square[i][i] for i in range(x)])
+        #     opts = opts.intersection(opts_d1)
+        #     if not opts:
+        #         return
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
@@ -112,13 +116,6 @@ def solve_parallel(args):
     fill(first_square(p1), (0, 0))
 
 
-'''
-26
-28
-32
-38
-40
-'''
 def solve(n):
     # For each value of a in increasing order, find the squares with primes
     H = defaultdict(list)
@@ -127,12 +124,9 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        # todo = ((n, a, len(H[a])) for a in sorted(H.keys()))
-        # print(list(todo))
-        # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a not in set([38, 40]):
+            if a not in set([26]):
                continue            
             primes = H[a]
             trie = PrimesTrie(primes)
