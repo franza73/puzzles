@@ -112,6 +112,27 @@ def solve_parallel(args):
     fill(first_square(p1), (0, 0))
 
 
+'''
+20 done
+22 done
+23
+25
+26
+28
+29
+31
+32
+34 done
+35
+37
+38
+40
+41
+43
+44 done
+
+set([46, 47, 49, 50, 52, 53])
+'''
 def solve(n):
     # For each value of a in increasing order, find the squares with primes
     H = defaultdict(list)
@@ -125,8 +146,9 @@ def solve(n):
         # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a != 44:
-               continue
+            if a not in set([46, 47, 49, 50, 52, 53]): 
+            #set([4, 5, 7, 8, 10, 11, 13, 14, 16, 17, 19]):
+               continue            
             primes = H[a]
             trie = PrimesTrie(primes)
             for p1 in primes:
