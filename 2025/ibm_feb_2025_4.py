@@ -78,7 +78,7 @@ def solve_parallel(args):
         if y == n:
             # full square
             full_cost, len_s = cost(square)
-            if full_cost != -1 and full_cost < 200:
+            if full_cost != -1 and full_cost < 180:
                 print(full_cost, len_s, a, square)
             #print(full_cost, square)
             return
@@ -108,7 +108,7 @@ def solve_parallel(args):
                 n_x = 0
                 n_y += 1
             fill(n_square, (n_x, n_y))
-
+    print('Starting', a, p1)
     fill(first_square(p1), (0, 0))
 
 
@@ -125,8 +125,8 @@ def solve(n):
         # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a != 28:
-                continue
+            if a != 20:
+               continue
             primes = H[a]
             trie = PrimesTrie(primes)
             for p1 in primes:
