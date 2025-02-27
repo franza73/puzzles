@@ -96,11 +96,11 @@ def solve_parallel(args):
         if not opts_y:
             return
         opts = opts_x.intersection(opts_y)
-        # if x == y:
-        #     opts_d1 = trie.search([square[i][i] for i in range(x)])
-        #     opts = opts.intersection(opts_d1)
-        #     if not opts:
-        #         return
+        if x == y:
+            opts_d1 = trie.search([square[i][i] for i in range(x)])
+            opts = opts.intersection(opts_d1)
+            if not opts:
+                return
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
