@@ -59,7 +59,7 @@ def cost(m):
     # Peace of mind... recheck the primes.
     for si in s:
        if not isprime(si):
-           return -1
+           return -1, -1
     hist = defaultdict(int)
     for si in s:
         for sii in map(int, list(str(si))):
@@ -78,7 +78,7 @@ def solve_parallel(args):
         if y == n:
             # full square
             full_cost, len_s = cost(square)
-            if full_cost != -1 and full_cost < 300:
+            if full_cost != -1:
                 print(full_cost, len_s, a, square)
             #print(full_cost, square)
             return
