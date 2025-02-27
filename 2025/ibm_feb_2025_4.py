@@ -35,15 +35,12 @@ class PrimesTrie:
         return set(curr.keys())
 
 
-def first_square(prime1, prime2):
-    n = len(str(prime1))
+def first_square(prime):
+    n = len(str(prime))
     m = [[-1] * n for _ in range(n)]
     for i in range(n-1, -1, -1):
-        m[i][i] = prime1 % 10
-        prime1 //= 10
-    for i in range(n-1, -1, -1):
-        m[i][n-i-1] = prime2 % 10
-        prime2 //= 10
+        m[i][n-i-1] = prime % 10
+        prime //= 10
     return m
 
 def cost(m):
@@ -58,10 +55,11 @@ def cost(m):
             hor[i] = hor[i] * 10 + m[i][j]
             ver[j] = ver[j] * 10 + m[i][j]
     s = set(hor).union(set(ver)).union(set(diag))
-    # Peace of mind... TODO: remove
-    # for si in s:
-    #    if not isprime(si):
-    #        return -1
+    _len_s = len(s)
+    # Peace of mind... recheck the primes.
+    for si in s:
+       if not isprime(si):
+           return -1
     hist = defaultdict(int)
     for si in s:
         for sii in map(int, list(str(si))):
@@ -69,18 +67,20 @@ def cost(m):
     cost = 0
     for k, v in hist.items():
         cost += (v*(v-1)) // 2
-    return cost
+    return cost, _len_s
 
 
 def solve_parallel(args):
-    n, a, trie, p1, p2 = args
+    n, a, trie, p1 = args
 
     def fill(square, pos):
         x, y = pos
         if y == n:
             # full square
-            full_cost = cost(square)
-            print(full_cost, square)
+            full_cost, len_s = cost(square)
+            if full_cost != -1 and full_cost < 300:
+                print(full_cost, len_s, a, square)
+            #print(full_cost, square)
             return
         if square[x][y] != -1:
             n_x, n_y = x + 1, y
@@ -100,14 +100,16 @@ def solve_parallel(args):
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
+            # symmetrical
+            if x != y and n_square[y][x] == -1:
+                n_square[y][x] = opt
             n_x, n_y = x + 1, y
             if n_x == n:
                 n_x = 0
                 n_y += 1
             fill(n_square, (n_x, n_y))
 
-    print('DEBUG:', p1, p2)
-    fill(first_square(p1, p2), (0, 0))
+    fill(first_square(p1), (0, 0))
 
 
 def solve(n):
@@ -123,13 +125,15 @@ def solve(n):
         # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a != 22:
-                continue
             primes = H[a]
             trie = PrimesTrie(primes)
             for p1 in primes:
-                for p2 in primes:
-                    todo += [(n, a, trie, p1, p2)]
+                cnt = 0
+                for x, y in zip(str(p1), str(p1)[::-1]):
+                    if x != y:
+                        cnt += 1
+                if cnt == 2:
+                    todo += [(n, a, trie, p1)]
         shuffle(todo)
         for res in executor.map(solve_parallel, todo):
             pass
