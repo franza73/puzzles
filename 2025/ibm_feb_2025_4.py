@@ -125,7 +125,7 @@ def solve(n):
         # exit(1)
         todo = []
         for a in sorted(H.keys()):
-            if a != 34:
+            if a != 28:
                 continue
             primes = H[a]
             trie = PrimesTrie(primes)
