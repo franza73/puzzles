@@ -115,8 +115,8 @@ def solve_parallel(args):
                 opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
                 if not opts_d2:
                     return
-        #for _, opt in sorted((hist[opt], opt) for opt in opts):
-        for opt in opts:
+        for _, opt in sorted((hist[opt], opt) for opt in opts):
+        #for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
             # symmetrical
