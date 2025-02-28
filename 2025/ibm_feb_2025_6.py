@@ -48,9 +48,9 @@ def cost(m):
             ver[j] = ver[j] * 10 + m[i][j]
     s = set(hor).union(set(ver)).union(set(diag))
     # Peace of mind... TODO: remove
-    for si in s:
-       if not isprime(si):
-           return -1
+    # for si in s:
+    #    if not isprime(si):
+    #        return -1
     hist = defaultdict(int)
     for si in s:
         for sii in map(int, list(str(si))):
@@ -72,10 +72,10 @@ def solve_parallel(args):
             print(full_cost, a, square)
             return
         # trim some large costs
-        # if index >= 16:
-        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-        #     if d_cost > 398:
-        #         return
+        if index >= 18:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            if d_cost > 398:
+                return
         opts = set()
         # # __MAX__ Explore dense squares
         # if index > 6:
