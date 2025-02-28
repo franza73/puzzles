@@ -74,7 +74,7 @@ def solve_parallel(args):
         # trim some large costs
         if index >= 18:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost > 500:
+            if d_cost > 400:
                 return
         opts = set()
         # # __MAX__ Explore dense squares
