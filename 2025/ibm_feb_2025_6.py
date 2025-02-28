@@ -15,7 +15,6 @@ from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
 from collections import Counter
-from random import shuffle
 
 
 class PrimesTrie:
@@ -49,9 +48,9 @@ def cost(m):
             ver[j] = ver[j] * 10 + m[i][j]
     s = set(hor).union(set(ver)).union(set(diag))
     # Peace of mind... TODO: remove
-    # for si in s:
-    #    if not isprime(si):
-    #        return -1
+    for si in s:
+       if not isprime(si):
+           return -1
     hist = defaultdict(int)
     for si in s:
         for sii in map(int, list(str(si))):
@@ -70,17 +69,14 @@ def solve_parallel(args):
         if y == n:
             # full square
             full_cost = cost(square)
-            if full_cost < 100:
-                print(full_cost, a, square)
+            print(full_cost, a, square)
             return
         # trim some large costs
-        if index >= 24:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost > 390:
-                return
+        # if index >= 16:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if d_cost > 398:
+        #         return
         opts = set()
-        if square[x][y] != -1:
-            opts.add(square[x][y])
         # # __MAX__ Explore dense squares
         # if index > 6:
         #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
@@ -97,31 +93,27 @@ def solve_parallel(args):
         #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
         #     if d_cost / index**2 > 0.36 or d_cost > 390:
         #         return
-        else:
-            opts_x = trie.search([square[x][j] for j in range(y)])
-            if not opts_x:
+        opts_x = trie.search([square[x][j] for j in range(y)])
+        if not opts_x:
+            return
+        opts_y = trie.search([square[i][y] for i in range(x)])
+        if not opts_y:
+            return
+        opts = opts_x.intersection(opts_y)
+        if x == y:
+            opts_d1 = trie.search([square[i][i] for i in range(x)])
+            opts = opts.intersection(opts_d1)
+            if not opts:
                 return
-            opts_y = trie.search([square[i][y] for i in range(x)])
-            if not opts_y:
-                return
-            opts = opts_x.intersection(opts_y)
-            if x == y:
-                opts_d1 = trie.search([square[i][i] for i in range(x)])
-                opts = opts.intersection(opts_d1)
-                if not opts:
+        if x == 1 and y == n-1 and square[0][n-1] > 0:
+            # Cut short if secondary diagonal was filled with non prime
+            opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
+            if not opts_d2:
                     return
-            if x == 1 and y == n-1 and square[0][n-1] > 0:
-                # Cut short if secondary diagonal was filled with non prime
-                opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
-                if not opts_d2:
-                    return
-        for _, opt in sorted((hist[opt], opt) for opt in opts):
-        #for opt in opts:
+        #for _, opt in sorted((hist[opt], opt) for opt in opts):
+        for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
-            # symmetrical
-            if x != y:
-                n_square[y][x] = opt 
             n_hist = Counter(hist)
             n_hist[opt] += 3 if (x == y or x+y == n-1) else 2
             n_x, n_y = x + 1, y
@@ -131,7 +123,7 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
+    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
 
 
 def solve(n):
@@ -142,12 +134,12 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = list((n, a, H[a]) for a in sorted(H.keys()))
-        shuffle(todo)
+        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 14)
         for res in executor.map(solve_parallel, todo):
             pass
 
+
 if __name__ == "__main__":
     #solve(4)
-    # solve(5)
+    #solve(5)
     solve(6)
