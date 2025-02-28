@@ -74,7 +74,7 @@ def solve_parallel(args):
         # trim some large costs
         if index >= 18:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost > 450:
+            if d_cost > 500:
                 return
         opts = set()
         # # __MAX__ Explore dense squares
@@ -134,7 +134,7 @@ def solve(n):
             A = sum(map(int, list(str(p))))
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        todo = ((n, a, H[a]) for a in sorted(H.keys()) if a == 14)
+        todo = ((n, a, H[a]) for a in sorted(H.keys()))
         for res in executor.map(solve_parallel, todo):
             pass
 
