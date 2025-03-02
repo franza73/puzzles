@@ -15,6 +15,7 @@ from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
 from collections import Counter
+from random import shuffle
 
 
 class PrimesTrie:
@@ -63,7 +64,8 @@ def cost(m):
 
 def solve_parallel(args):
     n, a, primes = args
-
+    #profile = {1: 3, 2: 10, 3: 21, 4: 36, 5: 37, 6: 40, 7: 59, 8: 95, 9: 102, 10: 113, 11: 158, 12: 159, 13: 194, 14: 199, 15: 202, 16: 262, 17: 307, 18: 356, 19: 409, 20: 466, 21: 559, 22: 574, 23: 589, 24: 608, 25: 615, 26: 651, 27: 680, 28: 713, 29: 815, 30: 888, 31: 912, 32: 949, 33: 990, 34: 1067}
+    profile_min = {1: 3, 2: 10, 3: 11, 4: 16, 5: 17, 6: 20, 7: 31, 8: 55, 9: 56, 10: 57, 11: 69, 12: 74, 13: 83, 14: 88, 15: 109, 16: 142, 17: 143, 18: 144, 19: 163, 20: 172, 21: 214, 22: 250, 23: 255, 24: 260, 25: 269, 26: 272, 27: 301, 28: 310, 29: 331, 30: 340, 31: 361, 32: 380, 33: 393, 34: 410, 35: 431}
     def fill(square, pos, hist, index):
         x, y = pos
         if y == n:
@@ -71,11 +73,25 @@ def solve_parallel(args):
             full_cost = cost(square)
             print(full_cost, a, square)
             return
-        # trim some large costs
-        if index >= 18:
+        # # trim some small costs __MAX__
+        # if index >= 1:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if index in profile and d_cost < 0.6*profile[index]:
+        #         return
+        #     # if index not in profile:
+        #     #     profile[index] = d_cost
+        #     # else:
+        #     #     profile[index] = max(profile[index], d_cost)
+        if index >= 1:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost > 400:
-                return
+            if index in profile_min and d_cost > 1.0 * profile_min[index]:
+                #print("Trimming", index, d_cost, profile_min[index])
+                return           
+            # if index not in profile:
+            #     profile[index] = d_cost
+            # else:
+            #     profile[index] = max(profile[index], d_cost)
+            # print(profile)
         opts = set()
         # # __MAX__ Explore dense squares
         # if index > 6:
@@ -110,7 +126,14 @@ def solve_parallel(args):
             opts_d2 = trie.search([square[i][n-i-1] for i in range(n)])
             if not opts_d2:
                     return
-        #for _, opt in sorted((hist[opt], opt) for opt in opts):
+        if square[x][y] != -1:
+            if square[x][y] in opts:
+                opts = set([square[x][y]])
+            else:
+                return
+        #for _, opt in sorted(((hist[opt], opt) for opt in opts), reverse=False):
+        opts = list(opts)
+        shuffle(opts)
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
@@ -123,7 +146,21 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1)
 
     trie = PrimesTrie(primes)
-    fill([[0 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
+    m = [[-1,-1,-1,-1,-1,-1], 
+         [-1,-1,-1,-1,-1,-1], 
+         [-1,-1,-1,-1,-1,-1], 
+         [-1,-1,-1,-1,-1,-1], 
+         [-1,-1,-1,-1,-1,-1], 
+         [-1,-1,-1,-1,-1,-1]]
+    # m = [[9, 9, 2, 2, 3, 1], 
+    #      [9, 9, 0, 0, 5, 3], 
+    #      [2, 4, 2, 9, 2, 7], 
+    #      [2, 0, 9, 2, 6, 7], 
+    #      [3, 1, 6, 6, 3, 7], 
+    #      [1, 3, 7, 7, 7, 1]]
+    #m = [[9, 9, 9, 9, 5, 3], [9, 9, 3, 9, 7, 7], [9, 7, 5, 9, 7, 7], [9, 7, 9, 3, 7, 9], [1, 9, 9, 7, 9, 9], [7, 3, 9, 7, 9, 9]]
+    fill(m, (0, 0), Counter(), 0)
+    #fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0)
 
 
 def solve(n):
@@ -132,6 +169,8 @@ def solve(n):
     for p in range(10**(n-1), 10**n):
         if isprime(p):
             A = sum(map(int, list(str(p))))
+            if A % 2 == 1:
+                continue
             H[A] += [p]
     with concurrent.futures.ProcessPoolExecutor() as executor:
         todo = ((n, a, H[a]) for a in sorted(H.keys()))
