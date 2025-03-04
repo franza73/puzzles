@@ -60,13 +60,14 @@ def solve_parallel(args):
         x, y = pos
         if y == n:
             # full square
-            full_cost = cost(set_of_primes)  
-            print(full_cost, a, square)
+            full_cost = cost(set_of_primes)
+            if full_cost < 300:
+                print(full_cost, a, square)
             return
         # trim some small costs __MIN__
         if index >= 1:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.1 * profile_min[index]:
+            if index in profile_min and d_cost > 1.05 * profile_min[index]:
                 return           
         # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
