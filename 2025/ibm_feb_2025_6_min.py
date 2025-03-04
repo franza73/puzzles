@@ -64,10 +64,10 @@ def solve_parallel(args):
             print(full_cost, a, square)
             return
         # trim some small costs __MIN__
-        # if index >= 1:
-        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-        #     if index in profile_min and d_cost > 1.1 * profile_min[index]:
-        #         return           
+        if index >= 1:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            if index in profile_min and d_cost > 1.01 * profile_min[index]:
+                return           
         # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
@@ -92,10 +92,10 @@ def solve_parallel(args):
                 opts = set([square[x][y]])
             else:
                 return
-        for _, opt in sorted(((hist[opt], opt) for opt in opts)):
+        #for _, opt in sorted(((hist[opt], opt) for opt in opts)):
         #opts = list(opts)
         #shuffle(opts)
-        #for opt in opts:
+        for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
             n_hist = Counter(hist)
@@ -128,7 +128,7 @@ def solve_parallel(args):
         p = list(map(int, str(p)))
         m = [[-1 for i in range(n)] for j in range(n)]
         m[0][0] = p[0]
-
+        
         m[0][1] = p[1]
         m[0][2] = p[2]
         m[0][3] = p[3]
