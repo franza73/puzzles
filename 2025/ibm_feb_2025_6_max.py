@@ -65,16 +65,16 @@ def solve_parallel(args):
             return
 
         # __MAX__ trim small costs      - ** H1: first option **
-        # if index >= 1:
-        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-        #     if index in profile_max and d_cost < 0.8*profile_max[index]:
-        #         return
+        if index >= 1:
+            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+            if index in profile_max and d_cost < 0.8*profile_max[index]:
+                return
 
         # __MAX__ trim small costs      - ** H2: second option **
-        if index > 6:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if d_cost / index**2 < 0.83:
-                return
+        # if index > 6:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if d_cost / index**2 < 0.83:
+        #         return
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
         if not opts_x:
