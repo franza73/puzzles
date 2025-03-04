@@ -55,20 +55,21 @@ def cost(s):
 
 def solve_parallel(args):
     n, a, primes = args
-    profile_min = {1: 3, 2: 10, 3: 11, 4: 16, 5: 17, 6: 20, 7: 31, 8: 55, 9: 56, 10: 57, 11: 69, 12: 74, 13: 83, 14: 88, 15: 109, 16: 142, 17: 143, 18: 144, 19: 163, 20: 172, 21: 214, 22: 250, 23: 255, 24: 260, 25: 269, 26: 272, 27: 301, 28: 310, 29: 331, 30: 340, 31: 361, 32: 380, 33: 393, 34: 410, 35: 431}
+    #profile_min = {1: 3, 2: 10, 3: 11, 4: 16, 5: 17, 6: 20, 7: 31, 8: 55, 9: 56, 10: 57, 11: 69, 12: 74, 13: 83, 14: 88, 15: 109, 16: 142, 17: 143, 18: 144, 19: 163, 20: 172, 21: 214, 22: 250, 23: 255, 24: 260, 25: 269, 26: 272, 27: 301, 28: 310, 29: 331, 30: 340, 31: 361, 32: 380, 33: 393, 34: 410, 35: 431}
+    profile_min = {1: 3, 2: 4, 3: 5, 4: 6, 5: 7, 6: 10, 7: 15, 8: 30, 9: 31, 10: 46, 11: 55, 12: 56, 13: 61, 14: 66, 15: 81, 16: 84, 17: 91, 18: 110, 19: 121, 20: 132, 21: 135, 22: 159, 23: 168, 24: 175, 25: 188, 26: 221, 27: 236, 28: 253, 29: 286, 30: 301, 31: 319, 32: 324, 33: 347, 34: 364, 35: 383}
     def fill(square, pos, hist, index, set_of_primes, _cost):
         x, y = pos
         if y == n:
             # full square
             full_cost = cost(set_of_primes)
-            if full_cost < 300:
-                print(full_cost, a, square)
+            #if full_cost < 300:
+            print(full_cost, a, square)
             return
         # trim some small costs __MIN__
         if index >= 1:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.05 * profile_min[index]:
-                return           
+            if index in profile_min and d_cost > 1.01 * profile_min[index]:
+                return
         # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
@@ -142,17 +143,12 @@ def solve_parallel(args):
         m[4][0] = p[4]
         m[5][0] = p[5]
 
-        m[1][1] = p[1]
-        m[2][2] = p[2]
-        m[3][3] = p[3]
-        m[4][4] = p[4]
-        m[5][5] = p[5]        
-    # m = [[9, 9, 2, 2, 3, 1], 
-    #      [9, 9, 0, 0, 5, 3], 
-    #      [2, 4, 2, 9, 2, 7], 
-    #      [2, 0, 9, 2, 6, 7], 
-    #      [3, 1, 6, 6, 3, 7], 
-    #      [1, 3, 7, 7, 7, 1]]
+        # m[1][1] = p[1]
+        # m[2][2] = p[2]
+        # m[3][3] = p[3]
+        # m[4][4] = p[4]
+        # m[5][5] = p[5]
+    #m = [[5, 1, 7, 8, 2, 3], [1, 1, 2, 5, 8, 9], [7, 6, 7, 0, 5, 1], [8, 1, 4, 8, 2, 3], [2, 8, 5, 2, 2, 7], [3, 9, 1, 3, 7, 3]]
         fill(m, (0, 0), Counter(), 0, set(), 0)
     #fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
 
