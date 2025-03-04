@@ -66,7 +66,7 @@ def solve_parallel(args):
         # trim some small costs __MIN__
         if index >= 1:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.01 * profile_min[index]:
+            if index in profile_min and d_cost > 1.1 * profile_min[index]:
                 return           
         # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
