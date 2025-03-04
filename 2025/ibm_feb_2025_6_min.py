@@ -58,20 +58,17 @@ def solve_parallel(args):
     profile_min = {1: 3, 2: 10, 3: 11, 4: 16, 5: 17, 6: 20, 7: 31, 8: 55, 9: 56, 10: 57, 11: 69, 12: 74, 13: 83, 14: 88, 15: 109, 16: 142, 17: 143, 18: 144, 19: 163, 20: 172, 21: 214, 22: 250, 23: 255, 24: 260, 25: 269, 26: 272, 27: 301, 28: 310, 29: 331, 30: 340, 31: 361, 32: 380, 33: 393, 34: 410, 35: 431}
     def fill(square, pos, hist, index, set_of_primes, _cost):
         x, y = pos
-        full_cost = cost(set_of_primes) 
         if y == n:
             # full square
+            full_cost = cost(set_of_primes)  
             print(full_cost, a, square)
             return
-        if full_cost > 208:
-            print('Trim:', index,)
-            return        
         # trim some small costs __MIN__
-        if index >= 1:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.01 * profile_min[index]:
-                return           
-        
+        # if index >= 1:
+        #     d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
+        #     if index in profile_min and d_cost > 1.1 * profile_min[index]:
+        #         return           
+        # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
         if not opts_x:
@@ -127,14 +124,36 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1, n_set_of_primes, _cost)
 
     trie = PrimesTrie(primes)
+    for p in primes:
+        p = list(map(int, str(p)))
+        m = [[-1 for i in range(n)] for j in range(n)]
+        m[0][0] = p[0]
+
+        m[0][1] = p[1]
+        m[0][2] = p[2]
+        m[0][3] = p[3]
+        m[0][4] = p[4]
+        m[0][5] = p[5]
+
+        m[1][0] = p[1]
+        m[2][0] = p[2]
+        m[3][0] = p[3]
+        m[4][0] = p[4]
+        m[5][0] = p[5]
+
+        m[1][1] = p[1]
+        m[2][2] = p[2]
+        m[3][3] = p[3]
+        m[4][4] = p[4]
+        m[5][5] = p[5]        
     # m = [[9, 9, 2, 2, 3, 1], 
     #      [9, 9, 0, 0, 5, 3], 
     #      [2, 4, 2, 9, 2, 7], 
     #      [2, 0, 9, 2, 6, 7], 
     #      [3, 1, 6, 6, 3, 7], 
     #      [1, 3, 7, 7, 7, 1]]
-    # fill(m, (0, 0), Counter(), 0, set(), 0)
-    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
+        fill(m, (0, 0), Counter(), 0, set(), 0)
+    #fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
 
 
 def solve(n):
