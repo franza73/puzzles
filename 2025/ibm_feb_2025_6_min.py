@@ -126,31 +126,31 @@ def solve_parallel(args):
             fill(n_square, (n_x, n_y), n_hist, index + 1, n_set_of_primes, _cost)
 
     trie = PrimesTrie(primes)
-    for p in primes:
-        p = list(map(int, str(p)))
-        m = [[-1 for i in range(n)] for j in range(n)]
-        m[0][0] = p[0]
+    # for p in primes:
+    #     p = list(map(int, str(p)))
+    #     m = [[-1 for i in range(n)] for j in range(n)]
+    #     m[0][0] = p[0]
         
-        # m[0][1] = p[1]
-        # m[0][2] = p[2]
-        # m[0][3] = p[3]
-        # m[0][4] = p[4]
-        # m[0][5] = p[5]
+    #     # m[0][1] = p[1]
+    #     # m[0][2] = p[2]
+    #     # m[0][3] = p[3]
+    #     # m[0][4] = p[4]
+    #     # m[0][5] = p[5]
 
-        m[1][0] = p[1]
-        m[2][0] = p[2]
-        m[3][0] = p[3]
-        m[4][0] = p[4]
-        m[5][0] = p[5]
+    #     m[1][0] = p[1]
+    #     m[2][0] = p[2]
+    #     m[3][0] = p[3]
+    #     m[4][0] = p[4]
+    #     m[5][0] = p[5]
 
-        m[1][1] = p[1]
-        m[2][2] = p[2]
-        m[3][3] = p[3]
-        m[4][4] = p[4]
-        m[5][5] = p[5]
-    #m = [[5, 1, 7, 8, 2, 3], [1, 1, 2, 5, 8, 9], [7, 6, 7, 0, 5, 1], [8, 1, 4, 8, 2, 3], [2, 8, 5, 2, 2, 7], [3, 9, 1, 3, 7, 3]]
-        fill(m, (0, 0), Counter(), 0, set(), 0)
-    #fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
+    #     m[1][1] = p[1]
+    #     m[2][2] = p[2]
+    #     m[3][3] = p[3]
+    #     m[4][4] = p[4]
+    #     m[5][5] = p[5]
+    # #m = [[5, 1, 7, 8, 2, 3], [1, 1, 2, 5, 8, 9], [7, 6, 7, 0, 5, 1], [8, 1, 4, 8, 2, 3], [2, 8, 5, 2, 2, 7], [3, 9, 1, 3, 7, 3]]
+    #     fill(m, (0, 0), Counter(), 0, set(), 0)
+    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
 
 
 def solve(n):
