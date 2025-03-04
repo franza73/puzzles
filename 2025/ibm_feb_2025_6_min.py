@@ -59,16 +59,17 @@ def solve_parallel(args):
     def fill(square, pos, hist, index, set_of_primes, _cost):
         x, y = pos
         full_cost = cost(set_of_primes) 
-        if full_cost > 300:
-            return
         if y == n:
             # full square
             print(full_cost, a, square)
             return
+        if full_cost > 208:
+            print('Trim:', index,)
+            return        
         # trim some small costs __MIN__
         if index >= 1:
             d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.2 * profile_min[index]:
+            if index in profile_min and d_cost > 1.01 * profile_min[index]:
                 return           
         
         opts = set()
