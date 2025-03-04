@@ -62,8 +62,8 @@ def solve_parallel(args):
         if y == n:
             # full square
             full_cost = cost(set_of_primes)
-            #if full_cost < 300:
-            print(full_cost, a, square)
+            if full_cost < 300:
+                print(full_cost, a, square)
             return
         # trim some small costs __MIN__
         if index >= 1:
