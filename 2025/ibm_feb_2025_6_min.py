@@ -63,8 +63,8 @@ def solve_parallel(args):
             else:
                 return
         # FIXME __MIN__ Is the histogram really best?
-        #for _, opt in sorted(((hist[opt], opt) for opt in opts)):
-        for opt in opts:
+        for _, opt in sorted(((hist[opt], opt) for opt in opts)):
+        #for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
             n_hist = Counter(hist)
