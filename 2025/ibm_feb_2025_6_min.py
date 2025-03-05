@@ -1,6 +1,4 @@
 '''
-TODO: 1. add a non symmetry penalty, relative to the main diagonal.
-      2. for n = 6, if this measure is higher than six, discard the partial estimate.
 '''
 from collections import defaultdict
 from copy import deepcopy
@@ -30,18 +28,19 @@ class PrimesTrie:
 def solve_parallel(args):
     n, a, primes = args
     profile_min = {12: 7, 18: 16, 24: 26, 30: 48, 31: 66, 32: 95, 33: 119, 34: 157, 35: 157, 36: 192}
-    def fill(square, pos, hist, index, set_of_primes, _cost, _non_symmetry_cost=0):
+    def fill(square, pos, hist, index, set_of_primes, _cost, _non_symmetry_cost):
         x, y = pos
         # FIXME trim the bad non symmetric partial squares.
-        if _non_symmetry_cost > 6:
+        if _non_symmetry_cost > 3:
             return
         # FIXME __MIN__ coefficient: 1.2, for 12 and 1.0 for 36 
         if index in profile_min:
-            if _cost > int((1.3 - index / 120.0) * profile_min[index] + 0.5):
+            #if _cost > int((1.3 - index / 120.0) * profile_min[index] + 0.5):
+            if _cost > profile_min[index]:
                 return
         if y == n:
             # full square
-            print(_cost, a, square)
+            print(_cost, a, _non_symmetry_cost, square)
             return
         opts = set()
         #if x != y:
@@ -68,10 +67,14 @@ def solve_parallel(args):
             else:
                 return
         # FIXME __MIN__ Is the histogram really best?
-        for _, opt in sorted(((hist[opt], opt) for opt in opts)):
-        #for opt in opts:
+        #for _, opt in sorted(((hist[opt], opt) for opt in opts)):
+        for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
+            n_non_symmetry_cost = _non_symmetry_cost 
+            if x != y and n_square[x][y] != -1 and n_square[y][x] != -1 and n_square[x][y] != n_square[y][x]:
+                n_non_symmetry_cost += 1
+            # TODO: Cut short from here if too large...
             n_hist = Counter(hist)
             n_x, n_y = x + 1, y
             if n_x == n:
@@ -105,12 +108,11 @@ def solve_parallel(args):
             _cost = 0
             for _, v in n_hist.items():
                 _cost += (v*(v-1)) // 2
-            if n_square[x][y] != -1 and n_square[y][x] != -1 and n_square[x][y] != n_square[y][x]:
-                _non_symmetry_cost += 1
-            fill(n_square, (n_x, n_y), n_hist, index + 1, n_set_of_primes, _cost, _non_symmetry_cost)
+            fill(n_square, (n_x, n_y), n_hist, index + 1, n_set_of_primes, _cost, n_non_symmetry_cost)
 
     trie = PrimesTrie(primes)
-    # for p in primes:
+    #for p in primes:
+    # for p in [517823]:
     #     p = list(map(int, str(p)))
     #     m = [[-1 for i in range(n)] for j in range(n)]
     #     m[0][0] = p[0]
@@ -132,8 +134,9 @@ def solve_parallel(args):
     #     m[3][3] = p[3]
     #     m[4][4] = p[4]
     #     m[5][5] = p[5]
-    #     fill(m, (0, 0), Counter(), 0, set(), 0)
-    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
+    # m = [[5, 1, 7, 8, 2, 3], [-1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1]]
+    # fill(m, (0, 0), Counter(), 0, set(), 0, 0)
+    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0, 0)
 
 
 def solve(n):
