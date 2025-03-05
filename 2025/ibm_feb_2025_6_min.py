@@ -6,7 +6,6 @@ from copy import deepcopy
 from sympy import isprime
 import concurrent.futures
 from collections import Counter
-#from random import shuffle
 
 
 class PrimesTrie:
@@ -27,50 +26,19 @@ class PrimesTrie:
         return set(curr.keys())
 
 
-def cost(s):
-    #n = len(m)
-    # hor = [0] * n
-    # ver = [0] * n
-    # diag = [0] * 2
-    # for i in range(n):
-    #     diag[0] = diag[0] * 10 + m[i][i]
-    #     diag[1] = diag[1] * 10 + m[i][n-i-1]
-    #     for j in range(n):
-    #         hor[i] = hor[i] * 10 + m[i][j]
-    #         ver[j] = ver[j] * 10 + m[i][j]
-    # s = set(hor).union(set(ver)).union(set(diag))
-    # Peace of mind... TODO: remove
-    # for si in s:
-    #    if not isprime(si):
-    #        return -1
-    hist = defaultdict(int)
-    for si in s:
-        for sii in map(int, list(str(si))):
-            hist[sii] += 1
-    cost = 0
-    for k, v in hist.items():
-        cost += (v*(v-1)) // 2
-    return cost
-
-
 def solve_parallel(args):
     n, a, primes = args
-    #profile_min = {1: 3, 2: 10, 3: 11, 4: 16, 5: 17, 6: 20, 7: 31, 8: 55, 9: 56, 10: 57, 11: 69, 12: 74, 13: 83, 14: 88, 15: 109, 16: 142, 17: 143, 18: 144, 19: 163, 20: 172, 21: 214, 22: 250, 23: 255, 24: 260, 25: 269, 26: 272, 27: 301, 28: 310, 29: 331, 30: 340, 31: 361, 32: 380, 33: 393, 34: 410, 35: 431}
-    profile_min = {1: 3, 2: 4, 3: 5, 4: 6, 5: 7, 6: 10, 7: 15, 8: 30, 9: 31, 10: 46, 11: 55, 12: 56, 13: 61, 14: 66, 15: 81, 16: 84, 17: 91, 18: 110, 19: 121, 20: 132, 21: 135, 22: 159, 23: 168, 24: 175, 25: 188, 26: 221, 27: 236, 28: 253, 29: 286, 30: 301, 31: 319, 32: 324, 33: 347, 34: 364, 35: 383}
+    profile_min = {12: 7, 18: 16, 24: 26, 30: 48, 31: 66, 32: 95, 33: 119, 34: 157, 35: 157, 36: 192}
     def fill(square, pos, hist, index, set_of_primes, _cost):
         x, y = pos
+        # FIXME __MIN__ coefficient: 1.2, for 12 and 1.0 for 36 
+        if index in profile_min:
+            if _cost > int((1.3 - index / 120.0) * profile_min[index] + 0.5):
+                return
         if y == n:
             # full square
-            full_cost = cost(set_of_primes)
-            if full_cost < 300:
-                print(full_cost, a, square)
+            print(_cost, a, square)
             return
-        # trim some small costs __MIN__
-        if index >= 1:
-            d_cost = sum([(v*(v-1)) // 2 for v in hist.values()])
-            if index in profile_min and d_cost > 1.0 * profile_min[index]:
-                return
-        # TODO FIXME __MIN__ do not use hist here, use full_cost instead
         opts = set()
         opts_x = trie.search([square[x][j] for j in range(y)])
         if not opts_x:
@@ -94,63 +62,72 @@ def solve_parallel(args):
                 opts = set([square[x][y]])
             else:
                 return
+        # FIXME __MIN__ Is the histogram really best?
         #for _, opt in sorted(((hist[opt], opt) for opt in opts)):
-        #opts = list(opts)
-        #shuffle(opts)
         for opt in opts:
             n_square = deepcopy(square)
             n_square[x][y] = opt
             n_hist = Counter(hist)
-            n_hist[opt] += 3 if (x == y or x+y == n-1) else 2
             n_x, n_y = x + 1, y
             if n_x == n:
                 n_x = 0
                 n_y += 1
             # new set of primes
             n_set_of_primes = set(set_of_primes)
+            n_primes = set()
             if 30 <= index <= 35:
                 v = [n_square[index % 6][j] for j in range(6)]
                 p = int(''.join(map(str, v)))
-                n_set_of_primes.add(p)
+                n_primes.add(p)
             if index % 6 == 5:
-                p = int(''.join(map(str, [n_square[i][index // 6] for i in range(6)])))
-                n_set_of_primes.add(p)
+                v = [n_square[i][index // 6] for i in range(6)] 
+                p = int(''.join(map(str, v)))
+                n_primes.add(p)
             if index == 30:
                 v = [n_square[i][n-i-1] for i in range(n)]
                 p = int(''.join(map(str, v)))
-                n_set_of_primes.add(p) 
+                n_primes.add(p)
             if index == 35:
                 v = [n_square[i][i] for i in range(n)]
                 p = int(''.join(map(str, v)))
-                n_set_of_primes.add(p) 
+                n_primes.add(p)
+            for si in n_primes:
+                if si in n_set_of_primes:
+                    continue
+                n_set_of_primes.add(si)
+                for sii in map(int, list(str(si))):
+                    n_hist[sii] += 1
+            _cost = 0
+            for _, v in n_hist.items():
+                _cost += (v*(v-1)) // 2
             fill(n_square, (n_x, n_y), n_hist, index + 1, n_set_of_primes, _cost)
 
     trie = PrimesTrie(primes)
-    # for p in primes:
-    #     p = list(map(int, str(p)))
-    #     m = [[-1 for i in range(n)] for j in range(n)]
-    #     m[0][0] = p[0]
+    for p in primes:
+        p = list(map(int, str(p)))
+        m = [[-1 for i in range(n)] for j in range(n)]
+        m[0][0] = p[0]
         
-    #     # m[0][1] = p[1]
-    #     # m[0][2] = p[2]
-    #     # m[0][3] = p[3]
-    #     # m[0][4] = p[4]
-    #     # m[0][5] = p[5]
+        m[0][1] = p[1]
+        m[0][2] = p[2]
+        m[0][3] = p[3]
+        m[0][4] = p[4]
+        m[0][5] = p[5]
 
-    #     m[1][0] = p[1]
-    #     m[2][0] = p[2]
-    #     m[3][0] = p[3]
-    #     m[4][0] = p[4]
-    #     m[5][0] = p[5]
+        m[1][0] = p[1]
+        m[2][0] = p[2]
+        m[3][0] = p[3]
+        m[4][0] = p[4]
+        m[5][0] = p[5]
 
-    #     m[1][1] = p[1]
-    #     m[2][2] = p[2]
-    #     m[3][3] = p[3]
-    #     m[4][4] = p[4]
-    #     m[5][5] = p[5]
-    # #m = [[5, 1, 7, 8, 2, 3], [1, 1, 2, 5, 8, 9], [7, 6, 7, 0, 5, 1], [8, 1, 4, 8, 2, 3], [2, 8, 5, 2, 2, 7], [3, 9, 1, 3, 7, 3]]
-    #     fill(m, (0, 0), Counter(), 0, set(), 0)
-    fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
+        m[1][1] = p[1]
+        m[2][2] = p[2]
+        m[3][3] = p[3]
+        m[4][4] = p[4]
+        m[5][5] = p[5]
+    #m = [[5, 1, 7, 8, 2, 3], [1, 1, 2, 5, 8, 9], [7, 6, 7, 0, 5, 1], [8, 1, 4, 8, 2, 3], [2, 8, 5, 2, 2, 7], [3, 9, 1, 3, 7, 3]]
+        fill(m, (0, 0), Counter(), 0, set(), 0)
+    #fill([[-1 for i in range(n)] for j in range(n)], (0, 0), Counter(), 0, set(), 0)
 
 
 def solve(n):
