@@ -32,7 +32,6 @@ def solve_parallel(args):
         x, y = pos
         # FIXME trim the bad non symmetric partial squares.
         if _non_symmetry_cost > 3 or _cost > 192:
-            print(index)
             return
         # FIXME __MIN__ coefficient: 1.2, for 12 and 1.0 for 36 
         if index in profile_min:
