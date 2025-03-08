@@ -32,7 +32,7 @@ def score(n, A):
             r = effective_resistance(i, j, L_pinv)
             #print(f"R[{i+1},{j+1}] =", to_fraction(r))
             values.add(to_fraction(r))
-    print(len(values), values)
+    #print(len(values), values)
     return len(values) if '0' not in values else -1
 
 
