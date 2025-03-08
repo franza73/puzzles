@@ -18,7 +18,7 @@ def create_a(pos, n):
         H[y-1].add(x-1)
         a[x-1, y-1] += 1
         a[y-1, x-1] += 1
-    return a, all(len(H[a]) > 1 for a in range(n-1))
+    return a, all(len(H[a]) > 1 for a in range(n))
 
 def score(n, A):
     D = np.diag(np.sum(A, axis=1))
@@ -78,12 +78,12 @@ def score(n, A):
 # Asum = A.sum() // 2
 # print(score(5, A))
 # print(A)
-n = [(i, j) for i in range(1, 7) for j in range(1, 7) if j > i]
+n = [(i, j) for i in range(1, 6) for j in range(1, 6) if j > i]
 lst = [n[randrange(0, len(n))] for _ in range(8)]
 while True:
     index = randrange(0, len(n))
     lst_pos = randrange(0, 8)
-    a, is_valid = create_a(lst, 6)
+    a, is_valid = create_a(lst, 5)
     if not is_valid:
         lst[lst_pos] = n[index] 
         continue
