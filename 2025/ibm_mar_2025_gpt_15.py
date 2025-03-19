@@ -68,8 +68,8 @@ def count_valid_multigraphs(num_vertices, max_edges):
     return valid_graphs
 
 # Compute for 5 and 6 vertices
-# 5->9, 6->11, 7->13
-valid_multigraphs_5 = count_valid_multigraphs(8, 15)
+# 5->9, 6->11, 7->13, 8->15, 
+valid_multigraphs_5 = count_valid_multigraphs(9, 17)
 #valid_multigraphs_6 = count_valid_multigraphs(6, 9)
 
 print(f"Valid graphs with 5 vertices: {valid_multigraphs_5}")
