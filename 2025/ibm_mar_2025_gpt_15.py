@@ -19,10 +19,10 @@ def create_a(pos, n):
         H[y].add(x)
         a[x, y] += 1
         a[y, x] += 1
-    return a, all(len(H[a]) > 1 for a in range(7))
+    return a, all(len(H[a]) > 1 for a in range(8))
 
 def score(A):
-    n = 7
+    n = 8
     D = np.diag(np.sum(A, axis=1))
     L = D - A
     L_pinv = np.linalg.pinv(L)
@@ -60,7 +60,7 @@ def count_valid_multigraphs(num_vertices, max_edges):
             if not is_valid:
                 continue
             _score = score(a)
-            if _score >= 21:
+            if _score >= 28:
                 print(num_vertices, _edges, _score)
                 break
             valid_graphs += 1
