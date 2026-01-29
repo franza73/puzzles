@@ -50,8 +50,8 @@ i p_i  p_i+2  p_i+2N i_0 i_1 count p[i_0..i_1-1]
 Total count = 16, which matches the expected result f(5) = 16.
 
 Results:
-10**8   972989871151789 85.48s
-10**9 87105187375692805 940.83s
+10**8   972989871151789 in 85.48s
+10**9 87105187375692805 in 940.83s
 '''
 from primesieve import n_primes, primes, count_primes
 
