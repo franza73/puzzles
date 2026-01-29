@@ -22,6 +22,7 @@ jobs:
         pip install mpmath
         pip install numpy
         pip install numba
+        pip install primesieve
     - name: Analysing the code with pylint
       env:
         ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
