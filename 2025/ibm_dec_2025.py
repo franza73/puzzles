@@ -57,7 +57,7 @@ from primesieve import n_primes, primes, count_primes
 
 
 # -- Generate primes --
-N = 10**9
+N = 10**8
 p_low = n_primes(N, 3)
 p_high = primes(p_low[-1] + 2, p_low[-1] + 2 * N + 1000)
 p = p_low + p_high
