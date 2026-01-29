@@ -14,7 +14,7 @@ would be needed for the complete calculation.
 For helping with this task, I used the Python module primesieve. 
 
 The lists of primes were obtained, for
-N = 10**8, in 1.24s and for 
+N = 10**8, in 1.24s, and for 
 N = 10**9, in 13.1s.
 
 So I started with the knowledge that the total calculation would not be 
