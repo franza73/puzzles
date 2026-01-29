@@ -6,7 +6,7 @@ Here's my solution to the IBM Ponder This challenge for December 2025.
 1. Problem description:
 https://research.ibm.com/haifa/ponderthis/challenges/December2025.html
 
-2. Comments about the solution:
+2. Comments about my solution:
 
 Given the problem description, I calculated first all the primes that 
 would be needed for the complete calculation.
