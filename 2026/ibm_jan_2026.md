@@ -100,7 +100,7 @@ One step before that:
 
 Before turning to a complete program, let's think about something that is constant for all the partitions of a number $n$: the digit sum taken $\mod 9$. 
 
-Example: $A(123) = \{6, 15, 24, 123\}$, and all of these have digit sum congruent to $6 \mod 9$. 
+Example: `A(123) = {6, 15, 24, 123}`, and all of these have digit sum congruent to $6 \mod 9$. 
 
 Also remember that $a * b \mod 9  = a \mod 9 * b \mod 9$. 
 
@@ -108,7 +108,7 @@ Example: the terms of $123 \cdot A(123)$ all have module $n^2 = 36 = 0 \mod 9$.
 
 So we can apply these ideas to `x` and obtain:
 
-$x \mod 9 = n * ai \mod 9 = n \mod 9 * ai \mod 9 = n \mod 9 * n \mod 9$ and this is equal to $n \mod 9$ only if $n * (n - 1) = 0 \mod 9$, i.e. if $n$ is in $\{0, 1\} \mod 9$.
+$x \mod 9 = n * ai \mod 9 = n \mod 9 * ai \mod 9 = n \mod 9 * n \mod 9$ and this is equal to $n \mod 9$ only if $n * (n - 1) = 0 \mod 9$, i.e. if $n$ is in `{0, 1}` $\mod 9$.
 
 So we found a necessary condition on `n`.
 
